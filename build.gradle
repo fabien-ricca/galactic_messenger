@@ -23,10 +23,11 @@ test {
     useJUnitPlatform()
 }
 
-jar {
+jar{
+    enabled = false
+}
+
+bootJar {
     archiveBaseName.set('galactic_messenger_server')
     destinationDirectory = file('/')
-    manifest {
-        attributes 'Main-Class': 'org.example.Main'
-    }
 }
