@@ -3,7 +3,6 @@ plugins {
 }
 
 group = 'org.example'
-version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -19,6 +18,8 @@ test {
 }
 
 jar {
+    archiveBaseName.set('galactic_messenger_server')
+    destinationDirectory = file('/')
     manifest {
         attributes 'Main-Class': 'org.example.Main'
     }
