@@ -22,6 +22,7 @@ public class UserController {
     public void displayAllUsers(){
         List<UserModel> users = this.userService.findAllUsers();
 
+        System.out.println("Liste des utilisateurs :");
         users.forEach(user -> {
             System.out.println(user.getId() + " * " + user.getPrenom() + " * " + user.getNom());
         });
