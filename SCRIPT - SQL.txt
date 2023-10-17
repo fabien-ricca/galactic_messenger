@@ -1,0 +1,11 @@
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    prenom VARCHAR(50),
+    nom VARCHAR(50)
+);
+
+-- Ajout d'un utilisateur
+INSERT INTO users (prenom, nom) VALUES ('Lea', 'Dubois');
+INSERT INTO users (prenom, nom) VALUES ('Fabien', 'Ricca');
+INSERT INTO users (prenom, nom) VALUES ('Corentin', 'Roussel');
+INSERT INTO users (prenom, nom) VALUES ('Khouloud', 'Kartal');
