@@ -30,7 +30,7 @@ public class UserController {
 
     }
 
-    public static String login(String[] inputSplit, PrintWriter out) {
+    public static boolean login(String[] inputSplit, PrintWriter out) {
 
         UserModel user = new UserModel();
             user.setLogin(inputSplit[1]);
@@ -38,6 +38,6 @@ public class UserController {
 
         // Methode pour recuperer donnees pour connexion
 
-        return "you are logged";
+        return true;
     }
 }

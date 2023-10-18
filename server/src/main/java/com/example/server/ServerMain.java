@@ -39,11 +39,13 @@ public class ServerMain {
 
         if (Objects.equals(inputSplit[0], "/register")) {
             if(UserController.register(inputSplit, out)){
-                out.println("Inscription réussie");
+                out.println("ok register");
             }
         }
         else if(Objects.equals(inputSplit[0], "/login")){
-            UserController.login(inputSplit, out);
+            if(UserController.login(inputSplit, out)){
+                out.println("ok login");
+            }
         }
 
         System.out.println(input);

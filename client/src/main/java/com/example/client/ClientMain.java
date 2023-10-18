@@ -21,20 +21,49 @@ public class ClientMain {
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
     }
 
+    public String getAction() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter action (enter /help to view all actions) : ");
+        return scanner.nextLine();
+    }
+
+    public String processAction(String action, ClientMain client) throws IOException {
+        String[] actionSplit = action.split(" ");
+
+        switch (actionSplit[0]) {
+            case "/register", "/login" -> {
+                return client.sendMessage(action);
+            }
+            case"/deconnect" -> {
+                return client.stopConnection();
+            }
+            case "/help" -> {
+                return """
+                    Available actions :\s
+                    /register [username] [password]\s
+                    /login [username] [password]\s
+                    """;
+            }
+            default -> {
+                return """
+                    This action is not available. Available actions :\s
+                    /register [username] [password]\s
+                    /login [username] [password]\s
+                    """;
+            }
+        }
+    }
+
     public String sendMessage(String msg) throws IOException {
         out.println(msg);
         return in.readLine();
     }
 
-    public void getUserFromServer(String msg) throws IOException {
-        out.print(msg);
-        System.out.println(in.read());
-    }
-
-    public void stopConnection() throws IOException {
+    public String stopConnection() throws IOException {
         in.close();
         out.close();
         clientSocket.close();
+        return "deconnected";
     }
 
     public static void StartingClient(String[] args) throws IOException {
@@ -43,26 +72,33 @@ public class ClientMain {
         String ipServer = args[0];
         int port = Integer.parseInt(args[1]);
 
-        try {
-            client.startConnection(ipServer, port);
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+        client.startConnection(ipServer, port);
+        boolean ask = true;
+
+        String action;
+
+        while (ask) {
+            action = client.getAction();
+
+            String messageAction = client.processAction(action, client);
+
+            System.out.println(messageAction);
+
+            if (Objects.equals(action, "/deconnect")) {
+                return;
+            }else if (messageAction.startsWith("ok")) {
+                switch(action) {
+                    case "/register" -> {
+                        System.out.println("You are registered");
+                    }
+                    case "/login" -> {
+                        System.out.println("you are logged");
+                    }
+                }
+                ask = false;
+            }
         }
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter action (enter /help to view all actions) : ");
-        String action = scanner.nextLine();
-        String[] actionSplit = action.split(" ");
-
-        if(Objects.equals(actionSplit[0], "/register") || Objects.equals(actionSplit[0], "/login")) {
-            client.getUserFromServer(action);
-
-        }else if(Objects.equals(actionSplit[0], "/help")) {
-            System.out.print("""
-                    Available actions :\s
-                    /register [username] [password]\s
-                    /login [username] [password]""");
-        }
 
 
 
