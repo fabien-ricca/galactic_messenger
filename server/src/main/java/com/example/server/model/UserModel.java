@@ -9,18 +9,29 @@ public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @Column(name = "prenom")
-    private String prenom;
-    @Column(name = "nom")
-    private String nom;
+    @Column(name = "login")
+    private String login;
+    @Column(name = "password")
+    private String password;
+
 
     public int getId() {
         return id;
     }
-    public String getPrenom() {
-        return prenom;
+    public String getLogin() {
+        return login;
     }
-    public String getNom() {
-        return nom;
+    public String getPassword() {
+        return password;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    public void setLogin(String login) {
+        this.login = login;
+    }
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

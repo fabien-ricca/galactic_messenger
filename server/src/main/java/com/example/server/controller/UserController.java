@@ -5,26 +5,39 @@ import com.example.server.service.UserService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
+import java.io.PrintWriter;
 import java.util.List;
 
 @Controller
 public class UserController {
 
-    private UserService userService;
+    private static UserService userService;
 
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    @PostConstruct
-    public void displayAllUsers(){
-        List<UserModel> users = this.userService.findAllUsers();
 
-        System.out.println("Liste des utilisateurs :");
-        users.forEach(user -> {
-            System.out.println(user.getId() + " * " + user.getPrenom() + " * " + user.getNom());
-        });
+    public static boolean register(String[] inputSplit, PrintWriter out) {
+
+        UserModel user = new UserModel();
+            user.setLogin(inputSplit[1]);
+            user.setPassword(inputSplit[2]);
+
+        userService.register(user);
+        return true;
+
+    }
+
+    public static String login(String[] inputSplit, PrintWriter out) {
+
+        UserModel user = new UserModel();
+            user.setLogin(inputSplit[1]);
+            user.setPassword(inputSplit[2]);
+
+        // Methode pour recuperer donnees pour connexion
+
+        return "you are logged";
     }
 }
