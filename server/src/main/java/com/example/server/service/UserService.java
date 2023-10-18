@@ -11,7 +11,6 @@ import java.util.List;
 public class UserService {
 
     private UserRepository userRepository;
-
     @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -19,5 +18,10 @@ public class UserService {
 
     public List<UserModel> findAllUsers(){
         return userRepository.findAll();
+    }
+
+    public String register(UserModel user){
+//        userRepository.add...
+        return "Inscription réussie";
     }
 }
