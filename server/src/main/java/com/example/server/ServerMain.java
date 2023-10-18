@@ -17,19 +17,24 @@ public class ServerMain {
     private PrintWriter out;
     private BufferedReader in;
 
-
     public void start(int port) throws IOException {
         String ipServer = "127.0.0.1";
 
         serverSocket = new ServerSocket(port);      // crée un socket pour écouter les demandes de co
         System.out.println("Server available at " + ipServer + ":" + port);
+    }
 
+    public void connect() throws IOException {
         clientSocket = serverSocket.accept();       // écoute le socket et accepte la connection entrante
         out = new PrintWriter(clientSocket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+    }
 
-        String input = in.readLine();
-        System.out.println(input);
+    public String getCommand() throws IOException {
+        return in.readLine();
+    }
+
+    public void sendData(String input) {
         String[] inputSplit = input.split(" ");
 
         if (Objects.equals(inputSplit[0], "/register")) {
@@ -60,6 +65,7 @@ public class ServerMain {
 
         ServerMain server = new ServerMain();
         server.start(port);
-
+        server.connect();
+        server.sendData(server.getCommand());
     }
 }
