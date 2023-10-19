@@ -10,33 +10,57 @@ import java.util.Scanner;
 
 public class ClientMain {
 
-
+    // Socket su client.
     private Socket clientSocket;
+
+    //Output à afficher au client.
     private PrintWriter out;
+
+    // Input saisi par le client.
     private BufferedReader in;
 
+
+    /**
+     * Méthode pour se connecter au server.
+     */
     public void startConnection(String ip, int port) throws IOException {
         clientSocket = new Socket(ip, port);        // crée un socket pour se connecter
         out = new PrintWriter(clientSocket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
     }
 
+
+    /**
+     * Méthode pour envoyer un message vers le serveur.
+     */
     public String sendMessage(String msg) throws IOException {
         out.println(msg);
         return in.readLine();
     }
 
+
+    /**
+     * ....
+     */
     public void getUserFromServer(String msg) throws IOException {
         out.print(msg);
         System.out.println(in.read());
     }
 
+
+    /**
+     * Méthode pour interrompre la connexion au server.
+     */
     public void stopConnection() throws IOException {
         in.close();
         out.close();
         clientSocket.close();
     }
 
+
+    /**
+     * Méthode pour démarrer la connection au server.
+     */
     public static void StartingClient(String[] args) throws IOException {
         ClientMain client = new ClientMain();
 

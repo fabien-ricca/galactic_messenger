@@ -11,12 +11,23 @@ import java.net.Socket;
 import java.util.Objects;
 
 public class ServerMain {
+
+    // Socket du server.
     private ServerSocket serverSocket;
+
+    // Socket du client.
     private Socket clientSocket;
+
+    // Output vers le client.
     private PrintWriter out;
+
+    // Input depuis le client.
     private BufferedReader in;
 
 
+    /**
+     * Méthode pour démarrer le server.
+     */
     public void start(int port) throws IOException {
         String ipServer = "127.0.0.1";
 
@@ -44,6 +55,10 @@ public class ServerMain {
         System.out.println(input);
     }
 
+
+    /**
+     * Méthode pour éteindre le server.
+     */
     public void stop() throws IOException {
         in.close();
         out.close();
@@ -53,7 +68,7 @@ public class ServerMain {
 
 
     /**
-     * Lancement du server
+     * Méthode pour instancier le server.
      */
     public static void ServerStarting(String[] args) throws IOException {
         int port = Integer.parseInt(args[0]);

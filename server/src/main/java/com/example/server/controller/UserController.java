@@ -15,7 +15,10 @@ import java.util.List;
 @Controller
 public class UserController {
 
+    // Propriété permettant d'accéder aux méthodes de UserService.
     private static UserService userService;
+
+    // Liste des utilisateurs connectés.
     private static List<UserModel> connectedUsers = new ArrayList<>();
 
 

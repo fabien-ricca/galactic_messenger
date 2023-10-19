@@ -15,6 +15,9 @@ public class UserModel {
     private String password;
 
 
+    /**
+     * Getters...
+     */
     public int getId() {
         return id;
     }
@@ -25,6 +28,10 @@ public class UserModel {
         return password;
     }
 
+
+    /**
+     * Setters...
+     */
     public void setId(int id) {
         this.id = id;
     }
