@@ -82,13 +82,13 @@ public class ClientMain {
 
             String messageAction = client.processAction(action, client);
 
-            System.out.println(messageAction);
-
             if (Objects.equals(action, "/deconnect")) {
                 return;
-            }else if (messageAction.startsWith("ok")) {
-                switch(action) {
+            } else if (messageAction.startsWith("ok")) {
+                switch (action) {            // start with
                     case "/register" -> {
+
+                        System.out.println(messageAction.startsWith("ok"));
                         System.out.println("You are registered");
                     }
                     case "/login" -> {
@@ -96,19 +96,9 @@ public class ClientMain {
                     }
                 }
                 ask = false;
+            } else {
+                System.out.println(messageAction);
             }
         }
-
-
-
-
-
-
-//        String response = client.sendMessage("hello server");
-//        System.out.println("message envoyé");
-//
-//        if("hello client".equals(response)){
-//            System.out.println("Réponse du server : " + response);
-//        }
     }
 }
