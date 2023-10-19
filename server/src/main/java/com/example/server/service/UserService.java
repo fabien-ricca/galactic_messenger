@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
+    // Propriété permettant d'accéder aux méthodes de UserRepository.
     private final UserRepository userRepository;
 
 
@@ -37,7 +38,10 @@ public class UserService {
     }
 
 
-
+    /**
+     * Méthode pour récupérer les données d'un utilisateur via son login.<br>
+     * Retourne un objet UserModel de l'utilisateur.
+     */
     public UserModel findUser(String login){
         return userRepository.findByLogin(login);
     }

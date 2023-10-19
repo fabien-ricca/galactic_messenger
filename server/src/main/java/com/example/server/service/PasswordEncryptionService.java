@@ -1,13 +1,16 @@
 package com.example.server.service;
 
 import org.springframework.stereotype.Service;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 @Service
 public class PasswordEncryptionService {
 
+
+    /**
+     * Méthode pour hasher un mot de passe en 512b.
+     */
     public static String hashPassword(String password) {
         try {
             MessageDigest objMessDigest = MessageDigest.getInstance("SHA-512");
