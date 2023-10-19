@@ -11,9 +11,13 @@ import java.util.Scanner;
 
 public class ClientMain {
 
-
+    // Socket su client.
     private Socket clientSocket;
+
+    //Output à afficher au client.
     private PrintWriter out;
+
+    // Input saisi par le client.
     private BufferedReader in;
 
     /**
@@ -92,7 +96,15 @@ public class ClientMain {
     }
 
     /**
-     * Déconnecte le client du server
+     * ....
+     */
+    public void getUserFromServer(String msg) throws IOException {
+        out.print(msg);
+        System.out.println(in.read());
+    }
+
+    /**
+     * Interromp la connexion au server
      * @return Une string pour pouvoir vérifier que la déconnection a bien été effectuée
      */
     public String stopConnection() throws IOException {
@@ -134,7 +146,5 @@ public class ClientMain {
                 System.out.println(messageAction);
             }
         }
-
-
     }
 }
