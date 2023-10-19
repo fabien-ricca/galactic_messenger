@@ -2,7 +2,6 @@ package com.example.server;
 
 import com.example.server.controller.UserController;
 import jakarta.annotation.PostConstruct;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -33,12 +32,13 @@ public class ServerMain {
         String[] inputSplit = input.split(" ");
 
         if (Objects.equals(inputSplit[0], "/register")) {
-            if(UserController.register(inputSplit, out)){
-                out.println("Inscription réussie");
-            }
+
+            out.println(UserController.register(inputSplit, out));
+
         }
         else if(Objects.equals(inputSplit[0], "/login")){
-            UserController.login(inputSplit, out);
+
+            out.println(UserController.login(inputSplit, out));
         }
 
         System.out.println(input);
