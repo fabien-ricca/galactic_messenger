@@ -36,7 +36,7 @@ public class UserController {
      */
     public static String register(String[] inputSplit, PrintWriter out) {
 
-        if(!checkLoginExist(inputSplit[1])){
+        if(checkLoginExist(inputSplit[1])){
             return "Erreur : Ce login n'est pas disponible.";
         }
 
