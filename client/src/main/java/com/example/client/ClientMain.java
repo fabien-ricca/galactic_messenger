@@ -54,7 +54,7 @@ public class ClientMain {
             case "/register", "/login" -> {
                 return client.sendMessage(action);
             }
-            case"/deconnect" -> {
+            case"/disconnect" -> {
                 return client.stopConnection();
             }
 //            case"/private_chat" -> {
@@ -74,6 +74,7 @@ public class ClientMain {
                     Available actions :\s
                     /register [username] [password]\s
                     /login [username] [password]\s
+                    /disconnect\s
                     """;
             }
             default -> {
@@ -81,6 +82,7 @@ public class ClientMain {
                     This action is not available. Available actions :\s
                     /register [username] [password]\s
                     /login [username] [password]\s
+                    /disconnect\s
                     """;
             }
         }
@@ -93,6 +95,30 @@ public class ClientMain {
     public String sendMessage(String msg) throws IOException {
         out.println(msg);
         return in.readLine();
+    }
+
+    /**
+     * Demande au client quoi faire (register, login, help) et le process
+     */
+    public void askAndProcessActionBeforeLogin(ClientMain client) throws IOException {
+        while (true) {
+            String action = client.getAction();
+
+            String messageAction = client.processAction(action, client);
+
+            if (Objects.equals(action, "/disconnect")) {
+                return;
+            } else if (messageAction.startsWith("ok")) {
+                if (action.startsWith("/register")) {
+                    System.out.println("You are registered");
+                } else if (action.startsWith("/login")) {
+                    System.out.println("You are logged");
+                }
+                break;
+            } else {
+                System.out.println(messageAction);
+            }
+        }
     }
 
     /**
@@ -111,40 +137,22 @@ public class ClientMain {
         in.close();
         out.close();
         clientSocket.close();
-        return "deconnected";
+        return "disconnected";
     }
 
     /**
      * Appelle toutes les méthodes dont on a besoin pour faire fonctionner le client
      */
     public static void StartingClient(String[] args) throws IOException {
+        // ajouter les erreurs d'arguments
+
         ClientMain client = new ClientMain();
 
         String ipServer = args[0];
         int port = Integer.parseInt(args[1]);
 
         client.startConnection(ipServer, port);
-        boolean ask = true;
 
-        String action;
-
-        while (ask) {
-            action = client.getAction();
-
-            String messageAction = client.processAction(action, client);
-
-            if (Objects.equals(action, "/deconnect")) {
-                return;
-            } else if (messageAction.startsWith("ok")) {
-                if (action.startsWith("/register")) {
-                    System.out.println("You are registered");
-                } else if (action.startsWith("/login")) {
-                    System.out.println("you are logged");
-                }
-                ask = false;
-            } else {
-                System.out.println(messageAction);
-            }
-        }
+        client.askAndProcessActionBeforeLogin(client);
     }
 }

@@ -16,13 +16,7 @@ public class ServerMain {
     private ServerSocket serverSocket;
 
     // Socket du client.
-    private Socket clientSocket;
-
-    // Output vers le client.
-    private PrintWriter out;
-
-    // Input depuis le client.
-    private BufferedReader in;
+    private Socket client;
 
     /**
      * Méthode pour démarrer le server.
@@ -38,56 +32,20 @@ public class ServerMain {
      * Méthode pour accepter la connection et créer les outils pour communiquer avec le client
      */
     public void connect() throws IOException {
-        clientSocket = serverSocket.accept();       // écoute le socket et accepte la connection entrante
-        out = new PrintWriter(clientSocket.getOutputStream(), true);
-        in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-    }
+        client = serverSocket.accept();       // écoute le socket et accepte la connection entrante
 
-    /**
-     * Méthode pour lire l'input du client
-     * @return L'input du client
-     */
-    public String getCommand() throws IOException {
-        return in.readLine();
-    }
+        System.out.println("New client connected" + client.getInetAddress().getHostAddress());
 
-    /**
-     * Méthode pour envoyer une String au client
-     */
-    public void sendData(String input) {
-        String[] inputSplit = input.split(" ");
-        String result;
-
-        if (Objects.equals(inputSplit[0], "/register")) {
-            result = UserController.register(inputSplit, out);
-
-            if(!result.startsWith("Erreur")){
-                out.println("ok register");
-            } else {
-                out.println(result);
-            }
-        }
-        else if(Objects.equals(inputSplit[0], "/login")){
-            result = UserController.login(inputSplit, out);
-
-            if(!result.startsWith("Login")){
-                out.println("ok login");
-            } else {
-                out.println(result);
-            }
-        }
-
-        System.out.println(input);
+        ClientHandler clientSock = new ClientHandler(client);
+        new Thread(clientSock).start();
     }
 
 
     /**
      * Méthode pour éteindre le server.
      */
-    public void stop() throws IOException {
-        in.close();
-        out.close();
-        clientSocket.close();
+    public void close() throws IOException {
+        client.close();
         serverSocket.close();
     }
 
@@ -99,8 +57,96 @@ public class ServerMain {
         int port = Integer.parseInt(args[0]);
 
         ServerMain server = new ServerMain();
-        server.start(port);
-        server.connect();
-        server.sendData(server.getCommand());
+        try {
+            server.start(port);
+
+            while (true) {
+                server.connect();
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (server != null) {
+                try {
+                    server.close();
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private static class ClientHandler implements Runnable {
+        private final Socket clientSocket;
+
+        // Output vers le client.
+        PrintWriter out = null;
+
+        // Input depuis le client.
+        BufferedReader in = null;
+
+        public ClientHandler(Socket socket)
+        {
+            this.clientSocket = socket;
+        }
+
+        @Override
+        public void run() {
+
+            try {
+                // get the outputstream of client
+                out = new PrintWriter(clientSocket.getOutputStream(), true);
+
+                // get the inputstream of client
+                in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
+                String line;
+                while ((line = in.readLine()) != null) {
+
+                    sentData(line);
+                }
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            finally {
+                try {
+                    if (out != null) {
+                        out.close();
+                    }
+                    if (in != null) {
+                        in.close();
+                        clientSocket.close();
+                    }
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        /**
+         * Méthode pour envoyer une String au client
+         */
+        public void sentData(String input) {
+            String[] inputSplit = input.split(" ");
+            String result;
+
+            if (Objects.equals(inputSplit[0], "/register")) {
+                result = UserController.register(inputSplit);
+
+                out.println(!result.startsWith("Error") ? "ok register" : result);
+            }
+            else if(Objects.equals(inputSplit[0], "/login")){
+                result = UserController.login(inputSplit);
+
+                out.println(!result.startsWith("Incorrect") ? "ok login" : result);
+            }
+
+            System.out.println(input);
+        }
     }
 }
